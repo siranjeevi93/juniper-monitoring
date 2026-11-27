@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}{{ switch.name }} - Dashboard{% endblock %}
+{% block content %}
+
+<div class="dash-header">
+  <div>
+    <h1>{{ switch.name }}</h1>
+    <div class="muted">{{ switch.host }}:{{ switch.port }}</div>
+  </div>
+  <div class="dash-actions">
+    <button id="collect-now">Collect Now</button>
+    <a href="/switches" class="btn-secondary">Back to Switches</a>
+  </div>
+</div>
+
+<div id="status-banner" class="status-banner" style="display:none;"></div>
+
+<section class="stat-grid" id="stat-grid"></section>
+
+<section class="chart-grid">
+  <div class="chart-box"><h3>CPU Utilization (%)</h3><canvas id="chart-cpu"></canvas></div>
+  <div class="chart-box"><h3>Memory Utilization (%)</h3><canvas id="chart-mem"></canvas></div>
+  <div class="chart-box"><h3>RE Temperature (&deg;C)</h3><canvas id="chart-temp"></canvas></div>
+  <div class="chart-box"><h3>Root Storage Used (%)</h3><canvas id="chart-storage"></canvas></div>
+  <div class="chart-box"><h3>Interfaces Up / Down</h3><canvas id="chart-iface"></canvas></div>
+  <div class="chart-box"><h3>Alarm Count</h3><canvas id="chart-alarms"></canvas></div>
+</section>
+
+<section class="panel">
+  <h2>Hardware &amp; Version</h2>
+  <pre id="version-box" class="raw-box">Loading...</pre>
+</section>
+
+<section class="panel">
+  <h2>Recent Log Messages</h2>
+  <pre id="log-box" class="raw-box">Loading...</pre>
+</section>
+
+<section class="panel">
+  <h2>Collection History</h2>
+  <table class="table" id="history-table">
+    <thead><tr><th>Collected At (UTC)</th><th>Status</th><th>Error</th></tr></thead>
+    <tbody></tbody>
+  </table>
+</section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+<script>
+  const switchId = {{ switch.id }};
+</script>
+<script src="/static/dashboard.js"></script>
+{% endblock %}

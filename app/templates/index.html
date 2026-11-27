@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Switches{% endblock %}
+{% block content %}
+
+<section class="panel">
+  <h2>{% if switches %}Add Another Switch{% else %}Add Your First Switch{% endif %}</h2>
+  <form method="post" action="/switches" class="form-grid">
+    <label>Name
+      <input type="text" name="name" placeholder="juniper1" required>
+    </label>
+    <label>Switch IP
+      <input type="text" name="host" placeholder="10.20.100.1" required>
+    </label>
+    <label>Port
+      <input type="number" name="port" value="22">
+    </label>
+    <label>Username
+      <input type="text" name="username" required>
+    </label>
+    <label>Password
+      <input type="password" name="password" required>
+    </label>
+    <button type="submit">Add &amp; Collect Now</button>
+  </form>
+</section>
+
+<section class="panel">
+  <h2>Switches</h2>
+  {% if not switches %}
+    <p class="muted">No switches added yet.</p>
+  {% else %}
+  <div class="switch-grid">
+    {% for sw in switches %}
+    <div class="switch-card">
+      <a href="/switches/{{ sw.id }}" class="switch-card-link">
+        <div class="switch-card-name">{{ sw.name }}</div>
+        <div class="switch-card-host">{{ sw.host }}</div>
+        {% if sw.latest %}
+          <div class="badge badge-{{ sw.latest.status }}">{{ sw.latest.status }}</div>
+          <div class="muted small">last collected: {{ sw.latest.collected_at }} UTC</div>
+        {% else %}
+          <div class="badge badge-pending">pending first collection</div>
+        {% endif %}
+      </a>
+      <form method="post" action="/switches/{{ sw.id }}/delete" onsubmit="return confirm('Remove {{ sw.name }} and all its history?');" class="inline-delete">
+        <button type="submit" class="link-danger">remove</button>
+      </form>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+</section>
+
+{% endblock %}
